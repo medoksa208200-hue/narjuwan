@@ -174,6 +174,30 @@
       .summary-value { display: block; margin-top: 10px; color: var(--color-primary-deep); font-size: clamp(1.18rem, 2.2vw, 1.55rem); font-weight: 700; line-height: 1.25; overflow-wrap: anywhere; }
       .summary-item:last-child .summary-value { color: var(--color-accent); }
 
+      .compare-panel, .compare-results { position: relative; z-index: 1; width: min(1048px, calc(100% - 16px)); margin: 22px auto 0; padding: clamp(1.2rem, 2.6vw, 1.7rem); border: 1px solid rgba(118, 91, 121, 0.23); border-right: 4px solid var(--color-primary); border-radius: 7px 20px 20px 7px; background: rgba(255, 253, 250, 0.94); box-shadow: var(--shadow-subtle); }
+      .compare-panel[hidden], .compare-results[hidden] { display: none; }
+      .compare-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: var(--space-3); padding-bottom: 14px; border-bottom: 3px double rgba(118, 91, 121, 0.24); }
+      .compare-heading h2 { margin-bottom: 3px; color: var(--color-primary-deep); font-size: 1.2rem; }
+      .compare-heading p { margin-bottom: 0; color: var(--color-muted); font-size: 0.84rem; }
+      .compare-count { display: inline-flex; align-items: center; min-width: 43px; justify-content: center; padding: 4px 9px; color: var(--color-primary-deep); border: 1px solid rgba(118, 91, 121, 0.25); background: rgba(118, 91, 121, 0.08); font-size: 0.78rem; font-weight: 700; }
+      .compare-list { display: flex; flex-wrap: wrap; gap: 9px; min-height: 38px; padding: 16px 0; }
+      .compare-empty { margin: 0; color: var(--color-muted); font-size: 0.86rem; }
+      .compare-chip { display: inline-flex; align-items: center; gap: 9px; min-height: 36px; padding: 5px 7px 5px 11px; border: 1px solid rgba(118, 91, 121, 0.25); border-radius: 999px; color: var(--color-primary-deep); background: rgba(118, 91, 121, 0.06); font-size: 0.82rem; font-weight: 700; }
+      .compare-chip button { display: grid; place-items: center; width: 25px; height: 25px; color: var(--color-danger); border-radius: 50%; background: transparent; }
+      .compare-chip button:hover { background: rgba(157, 84, 78, 0.1); }
+      .compare-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+      .compare-actions .button { min-height: 42px; font-size: 0.84rem; }
+      .comparison-table-wrap { overflow-x: auto; margin-top: 16px; border: 1px solid var(--color-border); }
+      .comparison-table { width: 100%; min-width: 720px; border-collapse: collapse; background: var(--color-surface); }
+      .comparison-table th, .comparison-table td { padding: 13px 15px; border-left: 1px solid #eee7de; border-bottom: 1px solid #eee7de; text-align: right; vertical-align: middle; }
+      .comparison-table thead th { color: var(--color-primary-deep); background: rgba(118, 91, 121, 0.08); font-size: 0.84rem; }
+      .comparison-table thead th:first-child { min-width: 156px; }
+      .comparison-table tbody th { color: var(--color-muted); background: var(--color-paper); font-size: 0.8rem; font-weight: 700; }
+      .comparison-table td { color: var(--color-text); font-size: 0.9rem; font-weight: 500; }
+      .comparison-table td.is-different { color: var(--color-primary-deep); background: rgba(201, 119, 67, 0.09); font-weight: 700; }
+      .comparison-table tr:last-child th, .comparison-table tr:last-child td { border-bottom: 0; }
+      .comparison-table th:last-child, .comparison-table td:last-child { border-left: 0; }
+
       .details-sections { display: grid; gap: 18px; }
       .detail-section { overflow: hidden; border: 1px solid rgba(222, 214, 204, 0.9); border-radius: var(--radius-md); background: rgba(255, 253, 250, 0.9); box-shadow: 0 10px 26px rgba(65, 48, 61, 0.045); }
       .section-title { position: relative; display: flex; align-items: center; gap: 10px; padding: 17px 20px; border-bottom: 0; }
@@ -213,6 +237,8 @@
         .detail-field:nth-child(2n) { border-left: 0; }
         .detail-field:nth-last-child(-n + 3) { border-bottom: 1px solid #eee7de; }
         .detail-field:nth-last-child(-n + 2) { border-bottom: 0; }
+        .compare-heading { display: block; }
+        .compare-count { margin-top: 9px; }
       }
       @media (max-width: 600px) {
         .shell { width: min(100% - 24px, 1180px); }
@@ -247,6 +273,9 @@
         .site-footer { padding-bottom: 22px; }
         .footer-inner { display: block; }
         .footer-lock { margin-top: 5px; }
+        .compare-panel, .compare-results { width: calc(100% - 8px); padding: 1.1rem; }
+        .compare-actions { display: grid; grid-template-columns: 1fr; }
+        .compare-actions .button { width: 100%; }
       }
       @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; } }
       @media print {
@@ -288,6 +317,7 @@
       <symbol id="icon-link" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.1.1l2-2a5 5 0 0 0-7.1-7.1l-1.1 1.1"/><path d="M14 11a5 5 0 0 0-7.1-.1l-2 2A5 5 0 0 0 12 20l1.1-1.1"/></symbol>
       <symbol id="icon-print" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 14h12v7H6z"/></symbol>
       <symbol id="icon-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></symbol>
+      <symbol id="icon-compare" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H4a1 1 0 0 0-1 1v4M16 3h4a1 1 0 0 1 1 1v4M8 21H4a1 1 0 0 1-1-1v-4M16 21h4a1 1 0 0 0 1-1v-4"/><path d="M8 8h8v8H8z"/></symbol>
     </svg>
 
     <header class="site-header">
@@ -350,10 +380,22 @@
             </div>
             <div class="form-actions">
               <button id="resetButton" class="button button-secondary" type="button">بحث جديد</button>
+              <button id="compareToggle" class="button button-secondary" type="button"><svg class="icon" aria-hidden="true"><use href="#icon-compare"></use></svg>مقارنة وحدات</button>
               <button id="searchButton" class="button button-primary" type="submit" disabled><svg class="icon" aria-hidden="true"><use href="#icon-search"></use></svg>عرض بيانات الوحدة</button>
             </div>
           </form>
         </div>
+
+        <section id="comparePanel" class="compare-panel" aria-labelledby="compareTitle" hidden>
+          <div class="compare-heading">
+            <div><h2 id="compareTitle">مقارنة الوحدات</h2><p>أضف من وحدتين إلى خمس وحدات، ثم قارن بياناتها العامة في جدول واحد.</p></div>
+            <span id="compareCount" class="compare-count">0 / 5</span>
+          </div>
+          <div id="compareList" class="compare-list"></div>
+          <div class="compare-actions"><button id="addSelectedToCompare" class="button button-primary" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-compare"></use></svg>إضافة الوحدة المختارة</button><button id="showComparison" class="button button-secondary" type="button" disabled><svg class="icon" aria-hidden="true"><use href="#icon-compare"></use></svg>عرض المقارنة</button><button id="clearComparison" class="button button-secondary" type="button">مسح المقارنة</button></div>
+        </section>
+
+        <section id="compareResults" class="compare-results" aria-live="polite" aria-label="نتائج مقارنة الوحدات" hidden></section>
 
         <div id="noticeRegion" class="notice-region" aria-live="polite" hidden></div>
 
@@ -382,13 +424,14 @@
         currency: 'SAR'
       };
 
-      const STATE = { controllers: {}, currentUnit: null, filtersReady: false };
+      const STATE = { controllers: {}, currentUnit: null, filtersReady: false, compareUnits: [], compareOpen: false };
       const DOM = {
         form: document.getElementById('searchForm'), project: document.getElementById('projectSelect'), building: document.getElementById('buildingSelect'), unit: document.getElementById('unitSelect'),
         projectStep: document.getElementById('projectStep'), buildingStep: document.getElementById('buildingStep'), unitStep: document.getElementById('unitStep'),
-        searchButton: document.getElementById('searchButton'), resetButton: document.getElementById('resetButton'),
+        searchButton: document.getElementById('searchButton'), resetButton: document.getElementById('resetButton'), compareToggle: document.getElementById('compareToggle'),
         filtersLoading: document.getElementById('filtersLoading'), filtersReady: document.getElementById('filtersReady'), notice: document.getElementById('noticeRegion'),
         empty: document.getElementById('emptyState'), details: document.getElementById('details'), unitTop: document.getElementById('unitTop'), summary: document.getElementById('summaryGrid'), sections: document.getElementById('detailsSections'),
+        comparePanel: document.getElementById('comparePanel'), compareList: document.getElementById('compareList'), compareCount: document.getElementById('compareCount'), addSelected: document.getElementById('addSelectedToCompare'), showComparison: document.getElementById('showComparison'), clearComparison: document.getElementById('clearComparison'), compareResults: document.getElementById('compareResults'),
         companyLogo: document.getElementById('companyLogo'), companyLogoFallback: document.getElementById('companyLogoFallback')
       };
 
@@ -405,6 +448,9 @@
         { title: 'السعر النهائي', icon: 'wallet', className: 'price-section', fields: [
           ['السعر النهائي للوحدة', 'final_price', 'money']
         ] }
+      ];
+      const COMPARISON_FIELDS = [
+        ['العمارة', 'building_no', 'text'], ['الدور', 'floor_name', 'text'], ['رقم الوحدة', 'unit_no', 'text'], ['صافي المساحة', 'net_area', 'area'], ['إجمالي مساحة الوحدة', 'total_area', 'area'], ['موقف بدروم', 'basement_parking', 'boolean'], ['موقف بالدور الأرضي', 'ground_parking', 'boolean'], ['موقف إضافي', 'extra_parking_1', 'boolean'], ['إطلالة على شارع', 'street_view', 'boolean'], ['إطلالة على شارعين', 'two_street_view', 'boolean'], ['مجلس منفصل', 'separate_majlis', 'boolean'], ['مستودع', 'storage', 'boolean'], ['عدد التراسات', 'terraces_count', 'number'], ['عدد غرف النوم', 'bedrooms_count', 'number'], ['عدد دورات المياه', 'bathrooms_count', 'number'], ['السعر النهائي للوحدة', 'final_price', 'money']
       ];
 
       function icon(name, className) {
@@ -449,6 +495,7 @@
       function updateStepStates() {
         DOM.buildingStep.classList.toggle('is-ready', Boolean(DOM.project.value)); DOM.unitStep.classList.toggle('is-ready', Boolean(DOM.building.value));
         DOM.searchButton.disabled = !(DOM.project.value && DOM.building.value && DOM.unit.value);
+        DOM.addSelected.disabled = !(DOM.project.value && DOM.building.value && DOM.unit.value) || STATE.compareUnits.length >= 5;
       }
       function hideResults() { STATE.currentUnit = null; DOM.details.hidden = true; DOM.empty.hidden = false; }
       function clearNotice() { clearNode(DOM.notice); DOM.notice.hidden = true; }
@@ -498,11 +545,42 @@
         else { const value = element('span', 'field-value' + (isBlank(raw) ? ' value-empty' : ''), visibleText(raw, type)); field.append(value); }
         return field;
       }
+      function unitKey(unit) { return [unit.project_name, unit.building_no, unit.unit_no].join('|'); }
+      function comparisonValue(unit, key, type) { const raw = unit[key]; if (type === 'boolean') return isBlank(raw) ? '—' : raw ? 'نعم' : 'لا'; return visibleText(raw, type); }
+      function renderComparePanel() {
+        DOM.comparePanel.hidden = !STATE.compareOpen; clearNode(DOM.compareList); DOM.compareCount.textContent = STATE.compareUnits.length + ' / 5'; DOM.showComparison.disabled = STATE.compareUnits.length < 2; updateStepStates();
+        if (!STATE.compareUnits.length) { DOM.compareList.append(element('p', 'compare-empty', 'اختر وحدة ثم اضغط «إضافة للمقارنة». يمكنك إضافة حتى خمس وحدات.')); return; }
+        STATE.compareUnits.forEach(unit => { const chip = element('div', 'compare-chip', 'العمارة ' + unit.building_no + ' · الوحدة ' + unit.unit_no); const remove = element('button', null, '×'); remove.type = 'button'; remove.setAttribute('aria-label', 'إزالة الوحدة ' + unit.unit_no + ' من المقارنة'); remove.addEventListener('click', () => removeComparisonUnit(unitKey(unit))); chip.append(remove); DOM.compareList.append(chip); });
+      }
+      function addUnitToCompare(unit) {
+        const key = unitKey(unit); if (STATE.compareUnits.some(item => unitKey(item) === key)) { STATE.compareOpen = true; renderComparePanel(); return; }
+        if (STATE.compareUnits.length >= 5) { showNotice('يمكن مقارنة خمس وحدات كحد أقصى.', 'info'); return; }
+        STATE.compareUnits.push(unit); STATE.compareOpen = true; renderComparePanel(); if (!DOM.compareResults.hidden) renderComparison(); DOM.comparePanel.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      function addCurrentUnitToCompare() { if (!STATE.currentUnit) { showNotice('اختر الوحدة من الاستعلام أعلاه ثم أضفها من لوحة المقارنة.', 'info'); return; } addUnitToCompare(STATE.currentUnit); }
+      async function addSelectedUnitToCompare() {
+        const project = DOM.project.value, building = DOM.building.value, unit = DOM.unit.value;
+        if (!project || !building || !unit) { showNotice('اختر المشروع والعمارة والوحدة أولًا.', 'info'); return; }
+        const selectedKey = [project, building, unit].join('|');
+        if (STATE.compareUnits.some(item => unitKey(item) === selectedKey)) { showNotice('هذه الوحدة موجودة بالفعل في المقارنة.', 'info'); return; }
+        DOM.addSelected.disabled = true;
+        try { const rows = await supabaseRequest('compare-add', 'public_units', { select: '*', project_name: 'eq.' + project, building_no: 'eq.' + building, unit_no: 'eq.' + unit, limit: '1' }); if (!rows.length) { showNotice('تعذر العثور على الوحدة المختارة للمقارنة.', 'info'); return; } addUnitToCompare(rows[0]); }
+        catch (error) { const message = errorMessage(error); if (message) showNotice(message); }
+        finally { updateStepStates(); }
+      }
+      function removeComparisonUnit(key) { STATE.compareUnits = STATE.compareUnits.filter(unit => unitKey(unit) !== key); if (STATE.compareUnits.length < 2) DOM.compareResults.hidden = true; renderComparePanel(); if (!DOM.compareResults.hidden) renderComparison(); }
+      function clearComparison() { STATE.compareUnits = []; DOM.compareResults.hidden = true; renderComparePanel(); }
+      function renderComparison() {
+        if (STATE.compareUnits.length < 2) { showNotice('أضف وحدتين على الأقل لعرض المقارنة.', 'info'); return; }
+        clearNode(DOM.compareResults); const heading = element('div', 'compare-heading'); heading.append(element('div', null)); heading.firstChild.append(element('h2', null, 'نتائج مقارنة الوحدات'), element('p', null, 'تُبرز الخانات الملونة الفروق بين الوحدات المختارة.')); const count = element('span', 'compare-count', STATE.compareUnits.length + ' وحدات'); heading.append(count); DOM.compareResults.append(heading);
+        const wrap = element('div', 'comparison-table-wrap'); const table = document.createElement('table'); table.className = 'comparison-table'; const thead = document.createElement('thead'); const headRow = document.createElement('tr'); headRow.append(element('th', null, 'المعلومة')); STATE.compareUnits.forEach(unit => headRow.append(element('th', null, 'العمارة ' + unit.building_no + ' · الوحدة ' + unit.unit_no))); thead.append(headRow); table.append(thead); const tbody = document.createElement('tbody');
+        COMPARISON_FIELDS.forEach(([label, key, type]) => { const row = document.createElement('tr'); row.append(element('th', null, label)); const values = STATE.compareUnits.map(unit => comparisonValue(unit, key, type)); const different = new Set(values).size > 1; values.forEach(value => row.append(element('td', different ? 'is-different' : '', value))); tbody.append(row); }); table.append(tbody); wrap.append(table); DOM.compareResults.append(wrap); DOM.compareResults.hidden = false; DOM.compareResults.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       function renderUnit(unit) {
         STATE.currentUnit = unit; clearNode(DOM.unitTop); clearNode(DOM.summary); clearNode(DOM.sections); clearNotice(); DOM.empty.hidden = true;
         const top = element('div', 'unit-top'); const titleBlock = element('div'); const breadcrumb = element('nav', 'breadcrumb'); breadcrumb.setAttribute('aria-label', 'مسار الوحدة'); [unit.project_name, 'العمارة ' + unit.building_no, 'الوحدة ' + unit.unit_no].forEach((item, index) => { if (index) breadcrumb.append(element('span', 'breadcrumb-separator', '/')); breadcrumb.append(element('span', null, item || '—')); }); titleBlock.append(breadcrumb);
         const titleRow = element('div', 'unit-title-row'); titleRow.append(element('h2', null, 'الوحدة ' + (unit.unit_no || '—'))); if (!isBlank(unit.unit_status)) { const status = element('span', 'status-badge' + (unit.unit_status === 'مباعة' ? ' is-sold' : ''), unit.unit_status); titleRow.append(status); } titleBlock.append(titleRow); titleBlock.append(element('p', 'unit-top-meta', 'العمارة ' + (unit.building_no || '—') + ' · الدور ' + (unit.floor_name || '—'))); top.append(titleBlock);
-        const tools = element('div', 'unit-tools'); const copyButton = element('button', 'button button-secondary', 'نسخ رابط الوحدة'); copyButton.type = 'button'; copyButton.append(icon('link')); copyButton.addEventListener('click', copyUnitLink); const printButton = element('button', 'button button-secondary', 'طباعة بيانات الوحدة'); printButton.type = 'button'; printButton.append(icon('print')); printButton.addEventListener('click', () => window.print()); tools.append(copyButton, printButton); top.append(tools); DOM.unitTop.append(top);
+        const tools = element('div', 'unit-tools'); const compareButton = element('button', 'button button-secondary', STATE.compareUnits.some(item => unitKey(item) === unitKey(unit)) ? 'ضمن المقارنة' : 'إضافة للمقارنة'); compareButton.type = 'button'; compareButton.append(icon('compare')); compareButton.disabled = STATE.compareUnits.some(item => unitKey(item) === unitKey(unit)) || STATE.compareUnits.length >= 5; compareButton.addEventListener('click', addCurrentUnitToCompare); const copyButton = element('button', 'button button-secondary', 'نسخ رابط الوحدة'); copyButton.type = 'button'; copyButton.append(icon('link')); copyButton.addEventListener('click', copyUnitLink); const printButton = element('button', 'button button-secondary', 'طباعة بيانات الوحدة'); printButton.type = 'button'; printButton.append(icon('print')); printButton.addEventListener('click', () => window.print()); tools.append(compareButton, copyButton, printButton); top.append(tools); DOM.unitTop.append(top);
         const summaries = [['إجمالي المساحة', 'total_area', 'area', 'ruler'], ['غرف النوم', 'bedrooms_count', 'number', 'bed'], ['دورات المياه', 'bathrooms_count', 'number', 'bath'], ['السعر النهائي', 'final_price', 'money', 'wallet']];
         summaries.forEach(([label, key, type, iconName]) => { const item = element('div', 'summary-item'); const labelNode = element('span', 'summary-label'); labelNode.append(icon(iconName)); labelNode.append(document.createTextNode(label)); item.append(labelNode, element('strong', 'summary-value' + (isBlank(unit[key]) ? ' value-empty' : ''), visibleText(unit[key], type))); DOM.summary.append(item); });
         SECTION_DEFINITIONS.forEach(definition => { const section = element('section', 'detail-section' + (definition.className ? ' ' + definition.className : '')); const header = element('div', 'section-title'); header.append(icon(definition.icon), element('h3', null, definition.title)); const fields = element('div', 'detail-fields'); definition.fields.forEach(([label, key, type]) => fields.append(makeDetailField(label, key, type, unit))); section.append(header, fields); DOM.sections.append(section); });
@@ -530,7 +608,7 @@
       }
       async function init() {
         DOM.companyLogo.addEventListener('error', () => { DOM.companyLogo.style.display = 'none'; DOM.companyLogoFallback.style.display = 'flex'; });
-        DOM.project.addEventListener('change', () => loadBuildings()); DOM.building.addEventListener('change', () => loadUnits()); DOM.unit.addEventListener('change', updateStepStates); DOM.form.addEventListener('submit', event => { event.preventDefault(); fetchUnit(); }); DOM.resetButton.addEventListener('click', resetSearch);
+        DOM.project.addEventListener('change', () => loadBuildings()); DOM.building.addEventListener('change', () => loadUnits()); DOM.unit.addEventListener('change', updateStepStates); DOM.form.addEventListener('submit', event => { event.preventDefault(); fetchUnit(); }); DOM.resetButton.addEventListener('click', resetSearch); DOM.compareToggle.addEventListener('click', () => { STATE.compareOpen = !STATE.compareOpen; renderComparePanel(); }); DOM.addSelected.addEventListener('click', addSelectedUnitToCompare); DOM.showComparison.addEventListener('click', renderComparison); DOM.clearComparison.addEventListener('click', clearComparison);
         const params = new URLSearchParams(window.location.search); const targetProject = params.get('project'); const targetBuilding = params.get('building'); const targetUnit = params.get('unit'); const projects = await loadProjects(targetProject);
         if (targetProject && !projects.includes(targetProject)) { showNotice('رابط الوحدة لا يشير إلى وحدة متاحة للعرض.', 'info'); return; }
         const selectedProject = targetProject || (projects.includes(CONFIG.projectName) ? CONFIG.projectName : ''); if (selectedProject) { DOM.project.value = selectedProject; const buildings = await loadBuildings(targetBuilding); if (targetBuilding && !buildings.includes(targetBuilding)) { showNotice('رابط الوحدة لا يشير إلى عمارة متاحة للعرض.', 'info'); return; } if (targetBuilding) { DOM.building.value = targetBuilding; const units = await loadUnits(targetUnit); if (targetUnit && units.includes(targetUnit)) { DOM.unit.value = targetUnit; updateStepStates(); await fetchUnit(); } else if (targetUnit) { showNotice('الوحدة غير موجودة أو غير متاحة للعرض.', 'info'); } } }
