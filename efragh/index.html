@@ -89,6 +89,100 @@ body{background:radial-gradient(circle at 88% 2%,rgba(118,91,121,.09),transparen
   .doc-section,.doc-section-body,.approvals,.signatures,.signature,.doc-footer{break-inside:avoid!important;page-break-inside:avoid!important}
 }
 
+
+/* ===== logo harmony fix v9 ===== */
+.official-brandbar{
+  gap:12px !important;
+  padding:8px 14px !important;
+  justify-content:center !important;
+  align-items:center !important;
+  max-width:100% !important;
+  overflow:hidden !important;
+  box-sizing:border-box !important;
+}
+.official-brandbar .narjuwan-logo-box,
+.official-brandbar .narjuwan-word{
+  width:130px !important;
+  height:56px !important;
+  flex:0 0 auto !important;
+  display:grid !important;
+  place-items:center !important;
+}
+.official-brandbar .narjuwan-brand-logo,
+.official-brandbar .narjuwan-official-logo{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+}
+.official-brandbar .divider{
+  flex:0 0 1px !important;
+  height:31px !important;
+}
+.official-brandbar .target-logo-wrap{
+  width:174px !important;
+  height:56px !important;
+  flex:0 0 auto !important;
+  display:grid !important;
+  place-items:center !important;
+  overflow:hidden !important;
+}
+.official-brandbar .target-logo{
+  width:100% !important;
+  height:100% !important;
+  object-fit:contain !important;
+  object-position:center !important;
+  transform:none !important;
+  mix-blend-mode:normal !important;
+}
+.identity-lockup .official-brandbar,
+.login-card .official-brandbar{
+  width:min(100%, 360px) !important;
+  margin-inline:auto !important;
+}
+.header-row .official-brandbar{
+  max-width:min(100%, 420px) !important;
+}
+.doc-header{
+  grid-template-columns:42mm minmax(0,1fr) 62mm !important;
+  gap:4mm !important;
+  align-items:center !important;
+}
+.doc-header .official-brandbar{
+  width:62mm !important;
+  max-width:62mm !important;
+  min-height:17.5mm !important;
+  padding:1.7mm 2.2mm !important;
+  gap:2.2mm !important;
+  justify-self:end !important;
+}
+.doc-header .official-brandbar .narjuwan-logo-box{
+  width:27mm !important;
+  height:12.5mm !important;
+}
+.doc-header .official-brandbar .target-logo-wrap{
+  width:29mm !important;
+  height:12.5mm !important;
+}
+.doc-header .official-brandbar .divider{
+  height:9.5mm !important;
+}
+@media (max-width: 650px){
+  .official-brandbar{gap:8px !important; padding:6px 10px !important;}
+  .official-brandbar .narjuwan-logo-box,
+  .official-brandbar .narjuwan-word{width:94px !important; height:40px !important;}
+  .official-brandbar .target-logo-wrap{width:118px !important; height:40px !important;}
+  .official-brandbar .divider{height:22px !important;}
+  .identity-lockup .official-brandbar,
+  .login-card .official-brandbar,
+  .header-row .official-brandbar{width:min(100%, 290px) !important; max-width:min(100%, 290px) !important;}
+}
+@media print{
+  .doc-header{grid-template-columns:42mm minmax(0,1fr) 62mm !important; gap:4mm !important;}
+  .doc-header .official-brandbar{width:62mm !important; max-width:62mm !important; overflow:hidden !important;}
+  .doc-header .official-brandbar .target-logo{transform:none !important;}
+}
+
 </style>
   
 <style id="print-asset-fixes">
