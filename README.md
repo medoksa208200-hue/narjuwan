@@ -32,5 +32,11 @@ Frontend now talks to the Supabase Edge Function `narjuwan-api` instead of calli
 
 
 ## V6 updates
-- Target logo is packaged locally in `assets/target-logo.png` so it prints reliably without depending on the remote GIF.
+- Tarqit logo is packaged locally in `assets/target-logo.png` so it prints reliably without depending on the remote GIF.
 - The evacuation-form QR code is a real scannable QR and opens the selected unit directly in the public portal using `project`, `building`, and `unit` query parameters.
+
+
+## V7 fixes
+- شعار شركة تارقيت ولوجو نرجوان مضمنان داخل HTML بصيغة data URI لضمان ظهورهما في الطباعة.
+- مولد QR مضمن داخل صفحة الإفراغ ولا يعتمد على ملف JavaScript خارجي أثناء التشغيل.
+- QR يفتح رابط الوحدة مباشرة في بوابة الاستعلام.
