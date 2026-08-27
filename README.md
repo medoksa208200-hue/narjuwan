@@ -12,3 +12,7 @@
 Framework preset: None
 Build command: اتركه فارغًا
 Output directory: جذر المستودع
+
+
+## v3
+Frontend now talks to the Supabase Edge Function `narjuwan-api` instead of calling PostgREST directly. This avoids browser API-key/header compatibility issues.

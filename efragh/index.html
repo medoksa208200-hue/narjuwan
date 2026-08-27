@@ -48,27 +48,27 @@
     </div>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
     <script>
-      const SUPABASE={url:'https://qspyetuujfanlutqtqmd.supabase.co',key:'sb_publishable_zKFrU03wtC5ayHLE8j4f2g_38_Cklv_'};
+      const API_URL='https://qspyetuujfanlutqtqmd.supabase.co/functions/v1/narjuwan-api';
       const SESSION_KEY='narjuwan_efragh_session';
       const state={unit:null,units:[],config:{ownerName:'',brokerageRate:.025,brokerageVatRate:.15,realEstateTransactionTax:.05},issued:null,forms:[],activeRecord:null,sessionToken:sessionStorage.getItem(SESSION_KEY)||''};
       const $=id=>document.getElementById(id);const value=id=>$(id).value.trim();const num=id=>{const raw=value(id);return raw===''?null:Number(raw)};const text=v=>v===null||v===undefined||String(v).trim()===''?'لا يوجد':String(v);const escapeHtml=v=>text(v).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));const yesNo=v=>v===true?'نعم':v===false?'لا':'لا يوجد';const money=v=>v===null||v===undefined||v===''?'لا يوجد':new Intl.NumberFormat('en-SA',{minimumFractionDigits:2,maximumFractionDigits:2}).format(Number(v))+' ر.س';const area=v=>v===null||v===undefined||v===''?'لا يوجد':new Intl.NumberFormat('ar-SA',{maximumFractionDigits:2}).format(Number(v))+' م²';const dateText=v=>v?new Date(v).toLocaleDateString('en-CA',{timeZone:'Asia/Riyadh'}):'لا يوجد';
       async function trpc(path,input,method='GET'){
         const map={
-          'efraghAuth.login':['efragh_login',()=>({p_username:input?.username||'',p_password:input?.password||''})],
-          'efraghAuth.status':['efragh_session_status',()=>({p_session_token:state.sessionToken||null})],
-          'efraghAuth.logout':['efragh_logout',()=>({p_session_token:state.sessionToken||null})],
-          'efragh.config':['efragh_config',()=>({p_session_token:state.sessionToken})],
-          'efragh.units':['efragh_units',()=>({p_session_token:state.sessionToken})],
-          'efragh.unit':['efragh_unit',()=>({p_session_token:state.sessionToken,p_unit_id:input?.unitId})],
-          'efragh.issue':['efragh_issue_form',()=>({p_session_token:state.sessionToken,p_unit_id:input?.unitId,p_manual:input?.manual||{}})],
-          'efragh.forms':['efragh_forms',()=>({p_session_token:state.sessionToken,p_search:input?.search||null})],
-          'efragh.form':['efragh_form',()=>({p_session_token:state.sessionToken,p_form_id:input?.formId})]
+          'efraghAuth.login':['admin.login',()=>({username:input?.username||'',password:input?.password||''})],
+          'efraghAuth.status':['admin.status',()=>({sessionToken:state.sessionToken||null})],
+          'efraghAuth.logout':['admin.logout',()=>({sessionToken:state.sessionToken||null})],
+          'efragh.config':['admin.config',()=>({sessionToken:state.sessionToken})],
+          'efragh.units':['admin.units',()=>({sessionToken:state.sessionToken})],
+          'efragh.unit':['admin.unit',()=>({sessionToken:state.sessionToken,unitId:input?.unitId})],
+          'efragh.issue':['admin.issue',()=>({sessionToken:state.sessionToken,unitId:input?.unitId,manual:input?.manual||{}})],
+          'efragh.forms':['admin.forms',()=>({sessionToken:state.sessionToken,search:input?.search||null})],
+          'efragh.form':['admin.form',()=>({sessionToken:state.sessionToken,formId:input?.formId})]
         };
         if(!map[path])throw new Error('العملية المطلوبة غير مدعومة.');
-        const [fn,args]=map[path];
-        const response=await fetch(SUPABASE.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:SUPABASE.key,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(args())});
+        const [action,args]=map[path];
+        const response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({action,payload:args()})});
         let body=null;try{body=await response.json()}catch{}
-        if(!response.ok){const message=body?.message||body?.error_description||'تعذر الاتصال بقاعدة البيانات.';if(response.status===401||response.status===403){state.sessionToken='';sessionStorage.removeItem(SESSION_KEY)}throw new Error(message)}
+        if(!response.ok||body?.error){const message=body?.message||'تعذر الاتصال بقاعدة البيانات.';if(response.status===401||response.status===403){state.sessionToken='';sessionStorage.removeItem(SESSION_KEY)}throw new Error(message)}
         if(path==='efraghAuth.login'&&body?.session_token){state.sessionToken=body.session_token;sessionStorage.setItem(SESSION_KEY,state.sessionToken)}
         if(path==='efraghAuth.logout'){state.sessionToken='';sessionStorage.removeItem(SESSION_KEY)}
         return body;

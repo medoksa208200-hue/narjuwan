@@ -418,8 +418,7 @@
     <script>
       /* رُواق نرجوان: تنفيذ أحادي الصفحة يتقدم بخطوات استعلام واضحة ويعرض الحقول الخضراء المصرّح بها فقط عبر RLS دون إدخال HTML ديناميكي. */
       const CONFIG = {
-        supabaseUrl: 'https://qspyetuujfanlutqtqmd.supabase.co',
-        supabaseAnonKey: 'sb_publishable_zKFrU03wtC5ayHLE8j4f2g_38_Cklv_',
+        apiUrl: 'https://qspyetuujfanlutqtqmd.supabase.co/functions/v1/narjuwan-api',
         projectName: 'نرجوان',
         currency: 'SAR'
       };
@@ -471,15 +470,20 @@
       async function supabaseRequest(scope, table, params) {
         if (STATE.controllers[scope]) STATE.controllers[scope].abort();
         const controller = new AbortController(); STATE.controllers[scope] = controller;
-        const timeout = window.setTimeout(() => controller.abort(timeoutError()), 10000);
-        const query = new URLSearchParams(params);
+        const timeout = window.setTimeout(() => controller.abort(timeoutError()), 12000);
+        let action = '', payload = {};
+        if (scope === 'projects') action = 'public.projects';
+        else if (scope === 'buildings') { action = 'public.buildings'; payload = { project: String(params.project_name || '').replace(/^eq\./,'') }; }
+        else if (scope === 'units') { action = 'public.units'; payload = { project: String(params.project_name || '').replace(/^eq\./,''), building: String(params.building_no || '').replace(/^eq\./,'') }; }
+        else { action = 'public.detail'; payload = { project: String(params.project_name || '').replace(/^eq\./,''), building: String(params.building_no || '').replace(/^eq\./,''), unit: String(params.unit_no || '').replace(/^eq\./,'') }; }
         try {
-          const response = await fetch(CONFIG.supabaseUrl + '/rest/v1/' + table + '?' + query.toString(), { signal: controller.signal, headers: { 'apikey': CONFIG.supabaseAnonKey, 'Accept': 'application/json' } });
-          if (!response.ok) throw new Error('http_' + response.status);
-          return await response.json();
+          const response = await fetch(CONFIG.apiUrl, { method:'POST', signal: controller.signal, headers:{'Content-Type':'application/json','Accept':'application/json'}, body:JSON.stringify({action,payload}) });
+          let body=null; try{body=await response.json()}catch{}
+          if (!response.ok || body?.error) throw new Error(body?.message || ('http_' + response.status));
+          return Array.isArray(body) ? body : (body || []);
         } catch (error) {
           if (controller.signal.aborted && error.name !== 'TimeoutError') { const abort = new Error('aborted'); abort.name = 'AbortError'; throw abort; }
-          throw error;
+          console.error('Narjuwan API error', error); throw error;
         } finally {
           window.clearTimeout(timeout); if (STATE.controllers[scope] === controller) STATE.controllers[scope] = null;
         }
