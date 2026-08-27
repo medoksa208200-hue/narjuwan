@@ -326,7 +326,7 @@
           <div class="narjuwan-logo-wrap" aria-label="نرجوان"><img class="narjuwan-official-logo" src="assets/narjuwan-logo.png" alt="شعار مشروع نرجوان" /></div>
           <span class="brand-divider" aria-hidden="true"></span>
           <div class="company-logo-wrap">
-            <img id="companyLogo" class="company-logo" src="https://targate.sa/wp-content/uploads/2025/04/Logo-GIF.gif" alt="شعار شركة Target للتطوير العقاري" />
+            <img id="companyLogo" class="company-logo" src="assets/target-logo.png" alt="شعار شركة Target للتطوير العقاري" />
             <div id="companyLogoFallback" class="company-logo-fallback" aria-hidden="true">TG</div>
           </div>
         </div>
@@ -461,7 +461,7 @@
       function uniqueSorted(values) { return [...new Set(values.filter(Boolean).map(String))].sort((a,b) => a.localeCompare(b, 'ar', { numeric: true })); }
       function isBlank(value) { return value === null || value === undefined || value === ''; }
       function formatNumber(value, fractionDigits) { if (isBlank(value)) return '—'; const n = Number(value); return Number.isFinite(n) ? new Intl.NumberFormat('ar-SA', { maximumFractionDigits: fractionDigits, minimumFractionDigits: 0 }).format(n) : String(value); }
-      function formatArea(value) { return isBlank(value) ? '—' : formatNumber(value, 3) + ' م²'; }
+      function formatArea(value) { return isBlank(value) ? '—' : formatNumber(Math.round(Number(value)), 0) + ' م²'; }
       function formatMoney(value) { if (isBlank(value)) return '—'; const n = Number(value); return Number.isFinite(n) ? new Intl.NumberFormat('ar-SA', { useGrouping: true, maximumFractionDigits: 0, minimumFractionDigits: 0 }).format(Math.round(n)) + ' ﷼' : String(value); }
       function formatDate(value) { if (isBlank(value)) return '—'; const parts = String(value).split('-'); if (parts.length !== 3) return String(value); const numbers = new Intl.NumberFormat('ar-SA', { useGrouping: false }); return parts.map(part => numbers.format(Number(part))).join(' / '); }
       function visibleText(value, type) { if (type === 'money') return formatMoney(value); if (type === 'area') return formatArea(value); if (type === 'number') return formatNumber(value, 0); if (type === 'date') return formatDate(value); return isBlank(value) ? '—' : String(value); }
