@@ -66,7 +66,7 @@
         };
         if(!map[path])throw new Error('العملية المطلوبة غير مدعومة.');
         const [fn,args]=map[path];
-        const response=await fetch(SUPABASE.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:SUPABASE.key,Authorization:'Bearer '+SUPABASE.key,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(args())});
+        const response=await fetch(SUPABASE.url+'/rest/v1/rpc/'+fn,{method:'POST',headers:{apikey:SUPABASE.key,'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify(args())});
         let body=null;try{body=await response.json()}catch{}
         if(!response.ok){const message=body?.message||body?.error_description||'تعذر الاتصال بقاعدة البيانات.';if(response.status===401||response.status===403){state.sessionToken='';sessionStorage.removeItem(SESSION_KEY)}throw new Error(message)}
         if(path==='efraghAuth.login'&&body?.session_token){state.sessionToken=body.session_token;sessionStorage.setItem(SESSION_KEY,state.sessionToken)}

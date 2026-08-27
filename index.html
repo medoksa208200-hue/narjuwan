@@ -474,7 +474,7 @@
         const timeout = window.setTimeout(() => controller.abort(timeoutError()), 10000);
         const query = new URLSearchParams(params);
         try {
-          const response = await fetch(CONFIG.supabaseUrl + '/rest/v1/' + table + '?' + query.toString(), { signal: controller.signal, headers: { 'apikey': CONFIG.supabaseAnonKey, 'Authorization': 'Bearer ' + CONFIG.supabaseAnonKey, 'Accept': 'application/json' } });
+          const response = await fetch(CONFIG.supabaseUrl + '/rest/v1/' + table + '?' + query.toString(), { signal: controller.signal, headers: { 'apikey': CONFIG.supabaseAnonKey, 'Accept': 'application/json' } });
           if (!response.ok) throw new Error('http_' + response.status);
           return await response.json();
         } catch (error) {
