@@ -18,7 +18,7 @@ const html=fs.readFileSync(path.join(root,'efragh/index.html'),'utf8');
 let code=[...html.matchAll(/<script(?:\s[^>]*)?>([\s\S]*?)<\/script>/g)].at(-1)[1];
 code=code.slice(0,code.indexOf('      const usageField='));
 const fields={};
-const get=id=>fields[id]??=( {value:'',innerHTML:'',querySelector:()=>null} );
+const get=id=>fields[id]??=( {value:'',innerHTML:'',dataset:{},querySelector:()=>null} );
 const context=vm.createContext({document:{getElementById:get},sessionStorage:{getItem:()=>null},window:{location:{href:"https://example.test/efragh/"}},URL,Intl,Date,console,setTimeout,clearTimeout});
 vm.runInContext(code,context);
 for(const [key,val] of Object.entries({documentType:'quote',buyerName:'اختبار',buyerIdentity:'123',buyerPhone:'0500000000',propertyType:'أرض',city:'الرياض',usage:'تجاري',issueDate:'2026-09-03',hijriDate:'اختبار',hasRealEstateTax:'yes',brokerageRatio:'0.5',totalArea:'1241.17',netArea:'1241.17'}))get(key).value=val;
@@ -39,8 +39,10 @@ assert.equal(vm.runInContext('finance().realEstateTax',context),0);
 assert.equal(vm.runInContext('finance().brokerageTotal',context),0);
 console.log('PASS: 967 plots, classifications, street counts, prices, JS syntax, land snapshot, financial choices, document fields.');
 
-assert(get('a4Document').innerHTML.includes('مجموع عروض الشوارع'));
-assert(get('a4Document').innerHTML.includes('65 م'));
+assert(!get('a4Document').innerHTML.includes('مجموع عروض الشوارع'));
+assert(get('a4Document').innerHTML.includes('street-count-badge'));
+assert.equal(get('a4Document').dataset.project,'maha');
+
 assert(get('a4Document').innerHTML.includes('M7 3 3 21'));
 assert(!get('a4Document').innerHTML.includes('صافي المساحة'));
 assert(!get('a4Document').innerHTML.includes('إجمالي المساحة'));
@@ -49,8 +51,17 @@ assert(get('a4Document').innerHTML.includes('لا يوجد'));
 snapshot.unit.deedNumber='12345';snapshot.unit.deedDate='2026-01-01';
 vm.runInContext('renderDocument(snapshot)',context);
 assert(get('a4Document').innerHTML.includes('12345'));
-snapshot.unit.assetKind='apartment';
+snapshot.unit.assetKind='apartment';snapshot.unit.projectName='نرجوان';
 vm.runInContext('renderDocument(snapshot)',context);
 assert(get('a4Document').innerHTML.includes('صافي المساحة'));
 assert(get('a4Document').innerHTML.includes('عدد الغرف'));
-console.log('PASS: street total and icon, absent/present deeds, single land area, apartment compatibility.');
+console.log('PASS: street badge and icons, no width total, absent/present deeds, single land area, project theme reset.');
+
+assert.equal(get("a4Document").dataset.project,"narjuwan");
+
+snapshot.unit.assetKind='land';snapshot.unit.projectName='المها';snapshot.documentType='quote';
+vm.runInContext('renderDocument(snapshot)',context);
+assert.equal(get('a4Document').dataset.project,'maha');
+assert(get('a4Document').innerHTML.includes('عرض سعر'));
+assert.equal((get('a4Document').innerHTML.match(/class="feature-card"/g)||[]).length,4);
+assert(get('a4Document').innerHTML.includes('street-count-badge'));

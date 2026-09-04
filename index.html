@@ -452,7 +452,7 @@
         ] }
       ];
       const originalProjectLogo=document.querySelector('.narjuwan-logo-wrap').innerHTML;
-      const LAND_FIELDS=[['الاستخدام','usage_type','text'],['الزون','zone','text'],['عدد الشوارع','street_count','number'],['مجموع عروض الشوارع (م)','street_width_total','number'],['عرض الشارع شمالًا (م)','street_north','number'],['عرض الشارع جنوبًا (م)','street_south','number'],['عرض الشارع شرقًا (م)','street_east','number'],['عرض الشارع غربًا (م)','street_west','number']];
+      const LAND_FIELDS=[['الاستخدام','usage_type','text'],['الزون','zone','text'],['عدد الشوارع','street_count','number'],['عرض الشارع شمالًا (م)','street_north','number'],['عرض الشارع جنوبًا (م)','street_south','number'],['عرض الشارع شرقًا (م)','street_east','number'],['عرض الشارع غربًا (م)','street_west','number']];
       const LAND_SECTIONS=[{title:'بيانات القطعة',icon:'building',fields:[['رقم البلوك','building_no','text'],['رقم القطعة','unit_no','text'],['مساحة القطعة','total_area','area'],...LAND_FIELDS]},{title:'السعر قبل السعي والضرائب',icon:'wallet',fields:[['سعر المتر','price_per_sqm','money'],['قيمة الأرض','final_price','money']]}];
       const COMPARISON_FIELDS = [
         ['العمارة', 'building_no', 'text'], ['الدور', 'floor_name', 'text'], ['رقم الوحدة', 'unit_no', 'text'], ['صافي المساحة', 'net_area', 'area'], ['إجمالي مساحة الوحدة', 'total_area', 'area'], ['موقف بدروم', 'basement_parking', 'boolean'], ['موقف بالدور الأرضي', 'ground_parking', 'boolean'], ['موقف إضافي', 'extra_parking_1', 'boolean'], ['إطلالة على شارع', 'street_view', 'boolean'], ['إطلالة على شارعين', 'two_street_view', 'boolean'], ['مجلس منفصل', 'separate_majlis', 'boolean'], ['مستودع', 'storage', 'boolean'], ['عدد التراسات', 'terraces_count', 'number'], ['عدد غرف النوم', 'bedrooms_count', 'number'], ['عدد دورات المياه', 'bathrooms_count', 'number'], ['السعر النهائي للوحدة', 'final_price', 'money']
@@ -523,7 +523,7 @@
       }
       async function loadBuildings(preferredBuilding) {
         const project = DOM.project.value; hideResults(); clearNotice();
-        document.getElementById('usageStep').hidden=project!=='المها';document.querySelector('.narjuwan-logo-wrap').innerHTML=project==='المها'?'<strong style="font-size:22px">المها</strong>':originalProjectLogo;
+        document.getElementById('usageStep').hidden=project!=='المها';document.querySelector('.narjuwan-logo-wrap').innerHTML=project==='المها'?'<img src="assets/maha-logo.svg" alt="مها الشرق" style="width:100%;height:auto">':originalProjectLogo;
         document.querySelector('label[for=buildingSelect]').textContent=project==='المها'?'رقم البلوك':'رقم العمارة';
         document.querySelector('label[for=unitSelect]').textContent=project==='المها'?'رقم القطعة':'رقم الوحدة';
         setSelectLoading(DOM.building, DOM.project.value==='المها'?'اختر رقم البلوك':'اختر رقم العمارة'); setSelectLoading(DOM.unit, DOM.project.value==='المها'?'اختر البلوك أولًا':'اختر العمارة أولًا'); updateStepStates();
@@ -550,13 +550,13 @@
         finally { setFilterLoading(false); }
       }
       function makeDetailField(label, key, type, unit) {
-        const field = element('div', 'detail-field'); field.append(element('span', 'field-label', label));if(unit.asset_kind==='land'&&key.startsWith('street_'))field.append(icon('road')); const raw = key==='street_width_total'&&unit.asset_kind==='land'?['north','south','east','west'].reduce((sum,d)=>sum+(Number(unit['street_'+d])||0),0):unit[key];
+        const field = element('div', 'detail-field'); field.append(element('span', 'field-label', label));if(unit.asset_kind==='land'&&key.startsWith('street_'))field.append(icon('road')); const raw = unit[key];
         if (type === 'boolean' && !isBlank(raw)) { const value = element('span', 'field-value boolean-value ' + (raw ? 'boolean-yes' : 'boolean-no')); value.append(icon(raw ? 'check' : 'x')); value.append(document.createTextNode(raw ? 'نعم' : 'لا')); field.append(value); }
         else { if(unit.asset_kind==='land'&&key.startsWith('street_')&&isBlank(raw)){field.append(element('span','field-value','لا يوجد'));return field;} const value = element('span', 'field-value' + (isBlank(raw) ? ' value-empty' : ''), visibleText(raw, type)); field.append(value); }
         return field;
       }
       function unitKey(unit) { return [unit.project_name, unit.building_no, unit.unit_no].join('|'); }
-      function comparisonValue(unit, key, type) { const raw = key==='street_width_total'&&unit.asset_kind==='land'?['north','south','east','west'].reduce((sum,d)=>sum+(Number(unit['street_'+d])||0),0):unit[key]; if (type === 'boolean') return isBlank(raw) ? '—' : raw ? 'نعم' : 'لا'; return visibleText(raw, type); }
+      function comparisonValue(unit, key, type) { const raw = unit[key]; if (type === 'boolean') return isBlank(raw) ? '—' : raw ? 'نعم' : 'لا'; return visibleText(raw, type); }
       function renderComparePanel() {
         DOM.comparePanel.hidden = !STATE.compareOpen; clearNode(DOM.compareList); DOM.compareCount.textContent = STATE.compareUnits.length + ' / 5'; DOM.showComparison.disabled = STATE.compareUnits.length < 2; updateStepStates();
         if (!STATE.compareUnits.length) { DOM.compareList.append(element('p', 'compare-empty', 'اختر وحدة ثم اضغط «إضافة للمقارنة». يمكنك إضافة حتى خمس وحدات.')); return; }
