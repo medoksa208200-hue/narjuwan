@@ -1,0 +1,36 @@
+name: Fix document area display
+
+on:
+  push:
+    paths:
+      - .github/workflows/fix-area-display-in-document.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fix area formatter
+        run: |
+          python3 <<'PY'
+          from pathlib import Path
+          p=Path('efragh/index.html')
+          s=p.read_text(encoding='utf-8')
+          old="const area=v=>v===null||v===undefined||v===''?'لا يوجد':new Intl.NumberFormat('ar-SA',{minimumFractionDigits:0,maximumFractionDigits:3}).format(Number(v))+' م²';"
+          new="const area=v=>{if(v===null||v===undefined)return'لا يوجد';const x=String(v).trim();if(!x)return'لا يوجد';if(/^(?:nan|null|undefined|false|no|لا|ليس رقما|ليس رقمًا)$/i.test(x))return'لا يوجد';if(/^(?:true|yes|نعم|يوجد|موجود)$/i.test(x))return'يوجد';const n=Number(x.replace(/,/g,''));if(!Number.isFinite(n)||n<=0)return'لا يوجد';return new Intl.NumberFormat('ar-SA',{minimumFractionDigits:0,maximumFractionDigits:3}).format(n)+' م²'};"
+          if old not in s:
+              raise SystemExit('area formatter not found')
+          p.write_text(s.replace(old,new,1),encoding='utf-8')
+          PY
+      - name: Commit
+        run: |
+          git config user.name github-actions-bot
+          git config user.email github-actions@users.noreply.github.com
+          git add efragh/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m 'Fix missing area values in document preview'
+          git push
