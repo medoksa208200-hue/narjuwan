@@ -8,7 +8,7 @@ const PAGE_SIZE=30;
 const statusOf=u=>u.unit_status||'متاحة';
 const statusClass=s=>s==='مباعة'?'sold':s==='محجوزة'?'reserved':'available';
 const normalize=v=>String(v??'').replace(/[٠-٩]/g,c=>String('٠١٢٣٤٥٦٧٨٩'.indexOf(c))).trim().toLowerCase();
-function lock(){units=[];selected=null;$('rows').replaceChildren();$('app').hidden=true;if($('edit').open)$('edit').close();sessionStorage.removeItem(SESSION_KEY);location.replace('../');}
+function lock(){units=[];selected=null;$('rows').replaceChildren();$('app').hidden=true;if($('edit').open)$('edit').close();sessionStorage.removeItem(SESSION_KEY);location.replace('../?next=sales');}
 async function rpc(name,args={}){
  const token=sessionStorage.getItem(SESSION_KEY);if(!token){lock();throw new Error('يرجى تسجيل الدخول.');}
  const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),20000);
