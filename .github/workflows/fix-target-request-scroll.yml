@@ -1,0 +1,36 @@
+name: Fix Target request scroll reset
+
+on:
+  push:
+    paths:
+      - '.github/workflows/fix-target-request-scroll.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prevent duplicate Target request handling
+        shell: python
+        run: |
+          from pathlib import Path
+          p=Path('efragh/index.html')
+          s=p.read_text(encoding='utf-8')
+          old="function receiveTargetRequest(payload){if(!payload?.id)return;state.pendingRequest=payload;sessionStorage.setItem('target_document_request',JSON.stringify(payload));if(!$('adminApp').classList.contains('hidden')&&state.units.length)applyTargetRequest()}"
+          new="function receiveTargetRequest(payload){if(!payload?.id)return;const key=String(payload.id);if(window.__lastTargetRequestId===key)return;window.__lastTargetRequestId=key;state.pendingRequest=payload;sessionStorage.setItem('target_document_request',JSON.stringify(payload));if(!$('adminApp').classList.contains('hidden')&&state.units.length)applyTargetRequest()}"
+          if old not in s:
+              raise SystemExit('Target request receiver not found; refusing unsafe edit')
+          s=s.replace(old,new,1)
+          p.write_text(s,encoding='utf-8')
+      - name: Commit fix
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add efragh/index.html
+          git diff --cached --quiet && exit 0
+          git commit -m "Prevent repeated Target request scroll reset"
+          git push
